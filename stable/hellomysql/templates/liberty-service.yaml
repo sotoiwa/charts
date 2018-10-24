@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: liberty
+spec:
+  type: ClusterIP
+  selector:
+    app: liberty
+  ports:
+  - protocol: TCP
+    port: 9080

@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-init
+spec:
+  template:
+    spec:
+      containers:
+      - image: sotoiwa540/hellomysql-init:1.0
+        name: init-hellomysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: root-password
+        command: ["sh", "-c"]
+        args: ["mysql -u root -p${MYSQL_ROOT_PASSWORD} -h mysql < init.sql"]
+      restartPolicy: OnFailure

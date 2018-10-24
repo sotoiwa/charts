@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: liberty-config
+data:
+  mysql-servername: "mysql"
+  mysql-portnumber: "3306"
+  mysql-user: "liberty"
