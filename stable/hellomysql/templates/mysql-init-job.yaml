@@ -1,19 +1,26 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: mysql-init
+  name: {{ .Release.Name }}-mysql-init
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": "post-install"
 spec:
   template:
     spec:
       containers:
-      - image: sotoiwa540/hellomysql-init:1.0
-        name: init-hellomysql
+      - name: init-hellomysql
+        image: "{{ .Values.init.repository }}:{{ .Values.init.tag }}"
+        imagePullPolicy: {{ .Values.init.pullPolicy }}
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: {{ .Values.mysql.secretName }}
               key: root-password
         command: ["sh", "-c"]
-        args: ["mysql -u root -p${MYSQL_ROOT_PASSWORD} -h mysql < init.sql"]
+        args: ["mysql -u root -p${MYSQL_ROOT_PASSWORD} -h {{ .Release.Name }}-mysql < init.sql"]
       restartPolicy: OnFailure

@@ -1,38 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: liberty
+  name: {{ .Release.Name }}-liberty
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
       app: liberty
-  replicas: 1
+      chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+  replicas: {{ .Values.liberty.replicaCount }}
   template:
     metadata:
       labels:
         app: liberty
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
     spec:
       containers:
       - name: liberty
-        image: sotoiwa540/hellomysql:1.0
-        imagePullPolicy: Always
+        image: "{{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}"
+        imagePullPolicy: {{ .Values.liberty.pullPolicy }}
         ports:
         - containerPort: 9080
         env:
         - name: MYSQL_SERVERNAME
           valueFrom:
             configMapKeyRef:
-              name: liberty-config
+              name: {{ .Release.Name }}-liberty-config
               key: mysql-servername
         - name: MYSQL_PORTNUMBER
           valueFrom:
             configMapKeyRef:
-              name: liberty-config
+              name: {{ .Release.Name }}-liberty-config
               key: mysql-portnumber
         - name: MYSQL_USER
           valueFrom:
             configMapKeyRef:
-              name: liberty-config
+              name: {{ .Release.Name }}-liberty-config
               key: mysql-user
         - name: MYSQL_PASSWORD
           valueFrom:
