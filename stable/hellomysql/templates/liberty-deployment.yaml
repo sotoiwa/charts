@@ -32,17 +32,17 @@ spec:
         - name: MYSQL_SERVERNAME
           valueFrom:
             configMapKeyRef:
-              name: liberty-config
+              name: {{ .Release.Name }}-liberty-config
               key: mysql-servername
         - name: MYSQL_PORTNUMBER
           valueFrom:
             configMapKeyRef:
-              name: liberty-config
+              name: {{ .Release.Name }}-liberty-config
               key: mysql-portnumber
         - name: MYSQL_USER
           valueFrom:
             configMapKeyRef:
-              name: liberty-config
+              name: {{ .Release.Name }}-liberty-config
               key: mysql-user
         - name: MYSQL_PASSWORD
           valueFrom:
