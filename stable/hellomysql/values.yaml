@@ -1,0 +1,20 @@
+mysql:
+  repository: mysql
+  tag: 5.7
+  pullPolicy: IfNotPresent
+  secretName: mysql-secret
+  persistence:
+    size: 10Gi
+    storageClassName: mysql
+
+init:
+  repository: sotoiwa540/hellomysql-init
+  tag: 1.0
+  pullPolicy: Always
+
+liberty:
+  repository: sotoiwa540/hellomysql
+  tag: 1.0
+  pullPolicy: Always
+  replicaCount: 1
+  secretName: liberty-secret

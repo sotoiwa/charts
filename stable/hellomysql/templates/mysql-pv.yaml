@@ -1,11 +1,15 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mysql-pv
+  name: {{ .Release.Name }}-mysql-pv
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
-  storageClassName: mysql
+  storageClassName: {{ .Values.mysql.persistence.storageClassName }}
   capacity:
-    storage: 10Gi
+    storage: {{ .Values.mysql.persistence.size }}
   accessModes:
     - ReadWriteOnce
   hostPath:

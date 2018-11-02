@@ -1,11 +1,15 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: {{ .Release.Name }}-mysql-pvc
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
-  storageClassName: mysql
+  storageClassName: {{ .Values.mysql.persistence.storageClassName }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: {{ .Values.mysql.persistence.size }}

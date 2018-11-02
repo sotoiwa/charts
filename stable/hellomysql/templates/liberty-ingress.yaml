@@ -1,9 +1,13 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: liberty
+  name: {{ .Release.Name }}-liberty
   annotations:
     ingress.kubernetes.io/rewrite-target: /
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   rules:
   - host:
@@ -11,5 +15,5 @@ spec:
       paths:
       - path: /liberty
         backend:
-          serviceName: liberty
+          serviceName: {{ .Release.Name }}-liberty
           servicePort: 9080

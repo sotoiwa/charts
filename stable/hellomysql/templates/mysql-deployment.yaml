@@ -1,25 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: {{ .Release.Name }}-mysql
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: mysql
+      chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
   template:
     metadata:
       labels:
         app: mysql
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
     spec:
       containers:
-      - image: mysql:5.7
-        name: mysql
+      - name: mysql
+        image: {{ .Values.mysql.repository }}:{{ .Values.mysql.tag }}
+        imagePullPolicy: {{ .Values.mysql.pullPolicy }}
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: {{ .Values.mysql.secretName }}
               key: root-password
         ports:
         - containerPort: 3306
