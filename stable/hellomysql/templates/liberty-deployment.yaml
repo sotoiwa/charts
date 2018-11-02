@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: liberty
-        image: {{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}
+        image: "{{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}"
         imagePullPolicy: {{ .Values.liberty.pullPolicy }}
         ports:
         - containerPort: 9080

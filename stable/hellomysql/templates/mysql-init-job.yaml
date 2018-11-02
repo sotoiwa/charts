@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: init-hellomysql
-        image: {{ .Values.init.repository }}:{{ .Values.init.tag }}
+        image: "{{ .Values.init.repository }}:{{ .Values.init.tag }}"
         imagePullPolicy: {{ .Values.init.pullPolicy }}
         env:
         - name: MYSQL_ROOT_PASSWORD

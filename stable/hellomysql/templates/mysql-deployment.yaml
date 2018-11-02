@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: {{ .Values.mysql.repository }}:{{ .Values.mysql.tag }}
+        image: "{{ .Values.mysql.repository }}:{{ .Values.mysql.tag }}"
         imagePullPolicy: {{ .Values.mysql.pullPolicy }}
         env:
         - name: MYSQL_ROOT_PASSWORD
