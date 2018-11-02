@@ -3,7 +3,7 @@ entries:
   example:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-10-24T13:49:48.400067463Z
+    created: 2018-11-02T17:44:17.52915+09:00
     description: A Helm chart for Kubernetes
     digest: 12cdaf8b7c7fafe17632d770af40518ca5ab037df4e033e0ce276ac6eb6e5b98
     name: example
@@ -13,11 +13,20 @@ entries:
   hellomysql:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-10-24T13:49:48.400404953Z
+    created: 2018-11-02T17:44:17.532387+09:00
+    description: A Helm chart for Kubernetes
+    digest: 1a41943a570a357e23a35e6f63cf22c8f0f9574078d5a865fb3cc8b17318c7f8
+    name: hellomysql
+    urls:
+    - hellomysql-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2018-11-02T17:44:17.530804+09:00
     description: A Helm chart for Kubernetes
     digest: 30d09a58f79d57e0d775212c10b4baa386fa937a576b1867491e5cfb7bdd257b
     name: hellomysql
     urls:
     - hellomysql-0.1.0.tgz
     version: 0.1.0
-generated: 2018-10-24T13:49:48.399585684Z
+generated: 2018-11-02T17:44:17.52289+09:00
