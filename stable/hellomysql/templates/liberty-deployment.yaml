@@ -13,7 +13,7 @@ spec:
       chart: {{ .Chart.Name }}-{{ .Chart.Version }}
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
-  replicas: 1
+  replicas: {{ .Values.liberty.replicaCount }}
   template:
     metadata:
       labels:
@@ -24,8 +24,8 @@ spec:
     spec:
       containers:
       - name: liberty
-        image: sotoiwa540/hellomysql:1.0
-        imagePullPolicy: Always
+        image: {{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}
+        imagePullPolicy: {{ .Values.liberty.pullPolicy }}
         ports:
         - containerPort: 9080
         env:
