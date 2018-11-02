@@ -22,5 +22,5 @@ spec:
               name: {{ .Values.mysql.secretName }}
               key: root-password
         command: ["sh", "-c"]
-        args: ["mysql -u root -p${MYSQL_ROOT_PASSWORD} -h mysql < init.sql"]
+        args: ["mysql -u root -p${MYSQL_ROOT_PASSWORD} -h {{ .Release.Name }}-mysql < init.sql"]
       restartPolicy: OnFailure
