@@ -15,28 +15,26 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Release.Service }}
+        app: {{ .Release.Name }}
         chart: {{ .Chart.Name }}-{{ .Chart.Version }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
       initContainers:
-      - name: init-liberty
+      - name: app
         image: "{{ .Values.app.repository }}:{{ .Values.app.tag }}"
         imagePullPolicy: {{ .Values.app.pullPolicy }}
         command:
-        - "/bin/sh"
-        - "-c"
-        args:
-        - "sleep"
-        - "10"
+        - sh
+        - -c
+        - |-
+          cp -rp /config/* /mnt/config/
+          cp -rp /userhome/* /mnt/userhome/
         volumeMounts:
-        - name: ephemeral-volume
+        - name: config-volume
           mountPath: /mnt/config
-          subPath: config
-        - name: ephemeral-volume
+        - name: userhome-volume
           mountPath: /mnt/userhome
-          subPath: userhome
       containers:
       - name: liberty
         image: "{{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}"
@@ -73,12 +71,10 @@ spec:
           requests:
 {{ toYaml .Values.resources.requests | indent 12 }}
         volumeMounts:
-        - name: ephemeral-volume
+        - name: config-volume
           mountPath: /config
-          subPath: config
-        - name: ephemeral-volume
+        - name: userhome-volume
           mountPath: /userhome
-          subPath: userhome
         - name: liberty-pvc
           mountPath: /logs
           subPath: logs
@@ -89,7 +85,9 @@ spec:
           mountPath: /Local/uservar000/mid/log
           subPath: applogs
       volumes:
-      - name: ephemeral-volume
+      - name: config-volume
+        emptyDir: {}
+      - name: userhome-volume
         emptyDir: {}
       restartPolicy: "Always"
       terminationGracePeriodSeconds: 30
@@ -99,7 +97,8 @@ spec:
       name: liberty-pvc
     spec:
       storageClassName: {{ .Release.Name }}
-      accessModes: ["ReadWriteOnce"]
+      accessModes:
+      - ReadWriteOnce
       resources:
         requests:
           storage: {{ .Values.persistence.size | quote }}
