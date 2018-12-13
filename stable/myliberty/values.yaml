@@ -1,0 +1,27 @@
+app:
+  repository: mycluster.icp:8500/sugi/alpine
+  tag: "3.7"
+  pullPolicy: Always
+
+liberty:
+  repository: mycluster.icp:8500/sugi/websphere-liberty
+  tag: "18.0.0.3-kernel"
+  pullPolicy: IfNotPresent
+
+replicaCount: 4
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+persistence:
+  size: "1Gi"
+
+secretName: commom-env
+configMapName: commom-env
+contextRoot: "/"
+

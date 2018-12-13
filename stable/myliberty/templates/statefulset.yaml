@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  serviceName: {{ .Release.Name }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Service }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      initContainers:
+      - name: init-liberty
+        image: "{{ .Values.app.repository }}:{{ .Values.app.tag }}"
+        imagePullPolicy: {{ .Values.app.pullPolicy }}
+        command: ["/bin/sh", "-c"]
+        args: |-
+          cp -rp /config/* /mnt/config/*
+          cp -rp /userhomeg/* /mnt/userhome/*
+        volumeMounts:
+        - name: ephemeral-volume
+          mountPath: /mnt/config
+          subPath: config
+        - name: ephemeral-volume
+          mountPath: /mnt/userhome
+          subPath: userhome
+      containers:
+      - name: liberty
+        image: "{{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}"
+        imagePullPolicy: {{ .Values.liberty.pullPolicy }}
+        ports:
+        - containerPort: 9080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        env:
+        - name: LICENSE
+          value: accept
+        - name: WLP_LOGGING_CONSOLE_FORMAT
+          value: standard
+        - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+          value: audit
+        - name : WLP_LOGGING_CONSOLE_SOURCE
+          value: message
+        - name : WLP_SKIP_UMASK
+          value: true
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.configMapName }}
+        - secretRef:
+            name: {{ .Values.secretName }}
+        resources:
+          limits:
+{{ toYaml .Values.resources.limits | indent 12 }}
+          requests:
+{{ toYaml .Values.resources.requests | indent 12 }}
+        volumeMounts:
+        - name: ephemeral-volume
+          mountPath: /config
+          subPath: config
+        - name: ephemeral-volume
+          mountPath: /userhome
+          subPath: userhome
+        - name: liberty-pvc
+          mountPath: /logs
+          subPath: logs
+        - name: liberty-pvc
+          mountPath: /Local/core/wlp
+          subPath: dump
+        - name: liberty-pvc
+          mountPath: /Local/uservar000/mid/log
+          subPath: applogs
+      volumes:
+      - name: ephemeral-volume
+        emptyDir: {}
+      restartPolicy: "Always"
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: "ClusterFirst"
+  volumeClaimTemplates:
+  - metadata:
+      name: liberty-pvc
+    spec:
+      storageClassName: {{ .Release.Name }}
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size | quote }}
