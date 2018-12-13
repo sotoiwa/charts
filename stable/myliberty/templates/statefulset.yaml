@@ -24,10 +24,12 @@ spec:
       - name: init-liberty
         image: "{{ .Values.app.repository }}:{{ .Values.app.tag }}"
         imagePullPolicy: {{ .Values.app.pullPolicy }}
-        command: ["/bin/sh", "-c"]
-        args: |-
-          cp -rp /config/* /mnt/config/*
-          cp -rp /userhomeg/* /mnt/userhome/*
+        command:
+        - "/bin/sh"
+        - "-c"
+        args:
+        - "sleep"
+        - "10"
         volumeMounts:
         - name: ephemeral-volume
           mountPath: /mnt/config
@@ -51,15 +53,15 @@ spec:
             port: http
         env:
         - name: LICENSE
-          value: accept
+          value: "accept"
         - name: WLP_LOGGING_CONSOLE_FORMAT
-          value: standard
+          value: "standard"
         - name: WLP_LOGGING_CONSOLE_LOGLEVEL
-          value: audit
+          value: "audit"
         - name : WLP_LOGGING_CONSOLE_SOURCE
-          value: message
+          value: "message"
         - name : WLP_SKIP_UMASK
-          value: true
+          value: "true"
         envFrom:
         - configMapRef:
             name: {{ .Values.configMapName }}
