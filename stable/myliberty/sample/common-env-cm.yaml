@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: common-env
+data:
+  DB2_PORT: "50000"
+  DB2_SERVERNAME: db2

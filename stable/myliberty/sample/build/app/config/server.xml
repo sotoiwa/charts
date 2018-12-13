@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="myliberty server">
+
+    <!-- Enable features -->
+    <featureManager>
+        <!-- <feature></feature> -->
+    </featureManager>
+
+</server>d
