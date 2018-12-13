@@ -22,7 +22,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: None
+  type: ClusterIP
+  clusterIP: None
   selector:
     app: {{ .Release.Name }}
   ports:
