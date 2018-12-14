@@ -18,6 +18,9 @@ resources:
     cpu: 1000m
     memory: 512Mi
 
+service:
+  port: 9080
+
 persistence:
   size: "1Gi"
 
