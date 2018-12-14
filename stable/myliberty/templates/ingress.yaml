@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "subsystem" . }}
   # annotations:
   #   ingress.kubernetes.io/rewrite-target: /
   labels:
@@ -15,5 +15,5 @@ spec:
       paths:
       - path: {{ .Values.contextRoot }}
         backend:
-          serviceName: {{ .Release.Name }}
+          serviceName: {{ include "subsystem" . }}
           servicePort: 9080

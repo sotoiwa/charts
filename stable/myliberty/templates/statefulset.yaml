@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "subsystem" . }}
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  serviceName: {{ .Release.Name }}
+  serviceName: {{ include "subsystem" . }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ include "subsystem" . }}
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ include "subsystem" . }}
         chart: {{ .Chart.Name }}-{{ .Chart.Version }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
