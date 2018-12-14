@@ -1,8 +1,10 @@
+# Init Containerのイメージの指定
 app:
   repository: mycluster.icp:8500/sugi/myliberty-app
   tag: "0.0.1"
   pullPolicy: Always
 
+# Liberty Containerのイメージの指定
 liberty:
   repository: mycluster.icp:8500/sugi/myliberty
   tag: "18.0.0.3"
@@ -23,6 +25,9 @@ service:
 
 persistence:
   size: "1Gi"
+
+env:
+  jvmArgs: ""
 
 secretName: common-env
 configMapName: common-env

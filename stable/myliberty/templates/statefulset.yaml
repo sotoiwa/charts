@@ -60,6 +60,8 @@ spec:
           value: "message"
         - name : WLP_SKIP_UMASK
           value: "true"
+        - name: JVM_ARGS
+          value: {{ .Values.env.jvmArgs }}
         envFrom:
         - configMapRef:
             name: {{ .Values.configMapName }}
