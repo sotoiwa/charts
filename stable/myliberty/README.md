@@ -101,7 +101,7 @@ helm lint myliberty
 実際のリリース前には以下のコマンドを実行し、リリースされるマニフェストを確認することができます。
 
 ```
-helm install --tls --debug --dry-run --name <リリース名> --namespace <Namespace名> myliberty
+helm install --tls --debug --dry-run --name <リリース名> --namespace <Namespace名> -f <valuefile> myliberty
 ```
 
 ### リリース方法
