@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "subsystem" . }}-np
+  name: {{ include "fullname" . }}-np
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
@@ -9,7 +9,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: {{ include "subsystem" . }}
+    app: {{ include "fullname" . }}
   ports:
   - port: {{ .Values.service.port }}
     targetPort: 9080
@@ -18,7 +18,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "subsystem" . }}
+  name: {{ include "fullname" . }}
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
@@ -27,7 +27,7 @@ spec:
   type: ClusterIP
   clusterIP: None
   selector:
-    app: {{ include "subsystem" . }}
+    app: {{ include "fullname" . }}
   ports:
   - port: {{ .Values.service.port }}
     targetPort: 9080
