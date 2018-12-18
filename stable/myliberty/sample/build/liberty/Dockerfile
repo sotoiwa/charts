@@ -1,11 +1,10 @@
-FROM websphere-liberty:18.0.0.3-javaee8
+FROM websphere-liberty:18.0.0.4-javaee8
 # Change locale and timezone
 USER 0
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     language-pack-ja \
-    tzdata \
-    curl && \
+    tzdata && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata

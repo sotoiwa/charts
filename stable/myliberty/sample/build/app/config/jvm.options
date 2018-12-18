@@ -1,1 +1,3 @@
+-Dconsole.encoding=UTF-8
+-Dfile.encoding=UTF-8
 -Xdump:tool:events=systhrow,filter=java/lang/OutOfMemoryError,exec=kill -9 %pid
