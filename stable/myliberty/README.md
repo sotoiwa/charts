@@ -40,7 +40,7 @@ configMapName: common-env
 ### PersistentVolume
 
 チャートをリリースすると、StatefulSetを使用しているので、`volumeClaimTemplates`の定義に基づいてPersistentVolumeClaimが作成されます。
-PersistentVolumeClaimの名前は`liberty-pvc-<サブシステム名>-<番号>`のようになります。ストレージクラス名はサブシステム名になります。
+PersistentVolumeClaimの名前は`liberty-pvc-<サブシステム名>-<番号>`のようになります。ストレージクラス名はリリース名になります。
 
 チャートのリリース前あるいはリリース後に、この要件を満たすPersistentVolumeを作成して下さい。`claimRef`を指定することで、特定のPersistentVolumeClaimにのみバインドさせることができます。
 
@@ -55,7 +55,7 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ca
+  storageClassName: ca-prod
   claimRef:
     namespace: sugi
     name: liberty-pvc-ca-0

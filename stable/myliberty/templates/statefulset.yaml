@@ -98,7 +98,7 @@ spec:
   - metadata:
       name: liberty-pvc
     spec:
-      storageClassName: {{ include "fullname" . }}
+      storageClassName: {{ .Release.Name }}
       accessModes:
       - ReadWriteOnce
       resources:
