@@ -1,0 +1,1 @@
+-Xdump:tool:events=systhrow,filter=java/lang/OutOfMemoryError,exec=kill -9 %pid

@@ -3,7 +3,38 @@
 
     <!-- Enable features -->
     <featureManager>
-        <!-- <feature></feature> -->
+        <feature>jsp-2.3</feature>
+        <feature>javaee-8.0</feature>
+        <feature>monitor-1.0</feature>
+        <feature>restConnector-2.0</feature>
     </featureManager>
 
-</server>d
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  httpPort="9080"
+                  httpsPort="9443"
+                  host="*" />
+
+    <!-- Not releavant to this topic, never mind -->
+    <basicRegistry id="basic" realm="BasicRealm"> 
+        <user password="password" name="jmxuser"/>
+    </basicRegistry>
+
+    <!-- Not releavant to this topic, never mind -->
+    <administrator-role>
+        <user>jmxuser</user>
+    </administrator-role>
+
+   <library id="pdProLib">
+    <folder dir="${server.config.dir}/libs" />
+    <file name="${server.config.dir}/libs/pdpro.native.dll" />
+   </library>
+
+   <application location ="pdpro.20110516.ear">
+   <classloader commonLibraryRef="pdProLib" />
+   </application>
+
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+
+</server>

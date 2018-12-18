@@ -11,7 +11,7 @@ spec:
   storageClassName: ca-prod
   claimRef:
     namespace: sugi
-    name: liberty-pvc-ca-prod-0
+    name: liberty-pvc-ca-0
   local:
     path: /tmp/ca-prod
   nodeAffinity:
