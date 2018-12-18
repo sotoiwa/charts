@@ -12,9 +12,11 @@ Init Containerとして使用するイメージの`/config`と`/userhome`に必�
 
 ```dockerfile
 FROM alpine:3.8
-COPY config/* /config/
-COPY userhome/* /userhome/
+COPY config/ /config/
+COPY userhome/ /userhome/
 ```
+
+`sample/build`フォルダに例があるので参照して下さい。
 
 ### ConfigMap/Secret
 

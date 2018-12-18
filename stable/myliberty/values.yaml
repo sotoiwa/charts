@@ -12,6 +12,28 @@ liberty:
 
 replicaCount: 1
 
+contextRoot: /top
+
+livenessProbe:
+  httpGet:
+    path: /top/index.html
+    port: 9080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /top/index.html
+    port: 9080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+
 resources:
   requests:
     cpu: 100m
@@ -24,12 +46,19 @@ service:
   port: 9080
 
 persistence:
+  name: "liberty-pvc"
   size: "1Gi"
+
+logs:
+  consoleFormat: standard
+  consoleLogLevel: info
+  consoleSource: message
 
 env:
   jvmArgs: ""
 
 secretName: common-env
 configMapName: common-env
-contextRoot: "/"
+
+
 

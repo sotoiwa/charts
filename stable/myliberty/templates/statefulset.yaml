@@ -30,6 +30,8 @@ spec:
         - |-
           cp -rp /config/* /mnt/config/
           cp -rp /userhome/* /mnt/userhome/
+          chown -R 1001:0 /mnt/config
+          chown -R 1001:0 /mnt/userhome
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config
@@ -42,24 +44,20 @@ spec:
         ports:
         - containerPort: 9080
         livenessProbe:
-          httpGet:
-            path: /
-            port: http
+          {{- toYaml .Values.livenessProbe | nindent 10 -}}
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
+          {{- toYaml .Values.livenessProbe | nindent 10 -}}
         env:
         - name: LICENSE
           value: "accept"
-        - name: WLP_LOGGING_CONSOLE_FORMAT
-          value: "standard"
-        - name: WLP_LOGGING_CONSOLE_LOGLEVEL
-          value: "audit"
-        - name : WLP_LOGGING_CONSOLE_SOURCE
-          value: "message"
         - name : WLP_SKIP_UMASK
           value: "true"
+        - name: WLP_LOGGING_CONSOLE_FORMAT
+          value: {{ .Values.logs.consoleFormat }}
+        - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+          value: {{ .Values.logs.consoleLogLevel }}
+        - name: WLP_LOGGING_CONSOLE_SOURCE
+          value: {{ .Values.logs.consoleSource }}
         - name: JVM_ARGS
           value: {{ .Values.env.jvmArgs }}
         envFrom:
@@ -68,10 +66,7 @@ spec:
         - secretRef:
             name: {{ .Values.secretName }}
         resources:
-          limits:
-{{ toYaml .Values.resources.limits | indent 12 }}
-          requests:
-{{ toYaml .Values.resources.requests | indent 12 }}
+          {{- toYaml .Values.resources | nindent 10 -}}
         volumeMounts:
         - name: config-volume
           mountPath: /config
@@ -96,7 +91,7 @@ spec:
       dnsPolicy: "ClusterFirst"
   volumeClaimTemplates:
   - metadata:
-      name: liberty-pvc
+      name: {{ .Values.persistence.name | quote }}
     spec:
       storageClassName: {{ .Release.Name }}
       accessModes:
