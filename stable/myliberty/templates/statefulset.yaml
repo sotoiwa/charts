@@ -22,8 +22,8 @@ spec:
     spec:
       initContainers:
       - name: app
-        image: "{{ .Values.app.repository }}:{{ .Values.app.tag }}"
-        imagePullPolicy: {{ .Values.app.pullPolicy }}
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        imagePullPolicy: {{ .Values.appImage.pullPolicy }}
         command:
         - sh
         - -c
@@ -39,14 +39,14 @@ spec:
           mountPath: /mnt/userhome
       containers:
       - name: liberty
-        image: "{{ .Values.liberty.repository }}:{{ .Values.liberty.tag }}"
-        imagePullPolicy: {{ .Values.liberty.pullPolicy }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 9080
         livenessProbe:
-          {{- toYaml .Values.livenessProbe | nindent 10 -}}
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
         readinessProbe:
-          {{- toYaml .Values.livenessProbe | nindent 10 -}}
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
         env:
         - name: LICENSE
           value: "accept"
@@ -66,7 +66,7 @@ spec:
         - secretRef:
             name: {{ .Values.secretName }}
         resources:
-          {{- toYaml .Values.resources | nindent 10 -}}
+          {{- toYaml .Values.resources | nindent 10 }}
         volumeMounts:
         - name: config-volume
           mountPath: /config

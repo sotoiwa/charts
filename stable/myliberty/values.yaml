@@ -1,11 +1,11 @@
 # Init Containerのイメージの指定
-app:
+appImage:
   repository: mycluster.icp:8500/sugi/myliberty-app
   tag: "0.0.1"
   pullPolicy: Always
 
 # Liberty Containerのイメージの指定
-liberty:
+image:
   repository: mycluster.icp:8500/sugi/myliberty
   tag: "18.0.0.3"
   pullPolicy: IfNotPresent
