@@ -8,6 +8,8 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   serviceName: {{ include "fullname" . }}
+  updateStrategy:
+    type: OnDelete
   selector:
     matchLabels:
       app: {{ include "fullname" . }}
@@ -20,6 +22,9 @@ spec:
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      terminationGracePeriodSeconds: 30    # Defaults to 30 seconds.
       initContainers:
       - name: app
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -90,9 +95,6 @@ spec:
         emptyDir: {}
       - name: userhome-volume
         emptyDir: {}
-      restartPolicy: "Always"
-      terminationGracePeriodSeconds: 30
-      dnsPolicy: "ClusterFirst"
   volumeClaimTemplates:
   - metadata:
       name: {{ .Values.persistence.name | quote }}
