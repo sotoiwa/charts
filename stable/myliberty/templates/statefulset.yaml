@@ -60,6 +60,10 @@ spec:
           value: {{ .Values.logs.consoleSource }}
         - name: JVM_ARGS
           value: {{ .Values.env.jvmArgs }}
+        - name: NODENAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         envFrom:
         - configMapRef:
             name: {{ .Values.configMapName }}

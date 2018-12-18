@@ -4,7 +4,8 @@ USER 0
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     language-pack-ja \
-    tzdata && \
+    tzdata \
+    curl && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
