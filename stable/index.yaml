@@ -3,7 +3,7 @@ entries:
   example:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-20T14:57:05.926551+09:00
+    created: 2018-12-20T16:52:13.724425+09:00
     description: A Helm chart for Kubernetes
     digest: 12cdaf8b7c7fafe17632d770af40518ca5ab037df4e033e0ce276ac6eb6e5b98
     name: example
@@ -13,7 +13,7 @@ entries:
   hellomysql:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-20T14:57:05.9336095+09:00
+    created: 2018-12-20T16:52:13.7300905+09:00
     description: A Helm chart for Kubernetes
     digest: 685b51a256aad898ae944137adf143406fefbded22f3be6c5952d3c674b6d34f
     name: hellomysql
@@ -22,7 +22,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-20T14:57:05.9304413+09:00
+    created: 2018-12-20T16:52:13.7274264+09:00
     description: A Helm chart for Kubernetes
     digest: 30d09a58f79d57e0d775212c10b4baa386fa937a576b1867491e5cfb7bdd257b
     name: hellomysql
@@ -32,11 +32,11 @@ entries:
   myliberty:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-20T14:57:05.9368835+09:00
+    created: 2018-12-20T16:52:13.7340261+09:00
     description: A Helm chart for Kubernetes
-    digest: 977f1fa02c520be4471dbad16b8fef0c50dad8712ecb248eac3b764f6e156ba0
+    digest: 66ed774edf3b172c37a94c6e2743b8be6321d93d4572e416359a802c78db5a6b
     name: myliberty
     urls:
     - myliberty-0.0.1.tgz
     version: 0.0.1
-generated: 2018-12-20T14:57:05.9214165+09:00
+generated: 2018-12-20T16:52:13.7187301+09:00

@@ -25,6 +25,8 @@ spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
       terminationGracePeriodSeconds: 30    # Defaults to 30 seconds.
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 6 }}
       initContainers:
       - name: app
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
