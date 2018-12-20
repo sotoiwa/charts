@@ -51,7 +51,7 @@ spec:
         livenessProbe:
           {{- toYaml .Values.livenessProbe | nindent 10 }}
         readinessProbe:
-          {{- toYaml .Values.livenessProbe | nindent 10 }}
+          {{- toYaml .Values.readinessProbe | nindent 10 }}
         env:
         - name: LICENSE
           value: "accept"

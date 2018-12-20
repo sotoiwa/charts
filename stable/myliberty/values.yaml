@@ -12,13 +12,13 @@ image:
 
 replicaCount: 1
 
-contextRoot: /top
+contextRoot: /sample
 
 livenessProbe:
   httpGet:
-    path: /top/index.html
+    path: /sample/index.html
     port: 9080
-  initialDelaySeconds: 10    # default no delay
+  initialDelaySeconds: 180   # default no delay
   periodSeconds: 10          # Default to 10 seconds. Minimum value is 1.
   timeoutSeconds: 1          # Defaults to 1 second. Minimum value is 1. 
   failureThreshold: 3        # Defaults to 3. Minimum value is 1.
@@ -26,7 +26,7 @@ livenessProbe:
 
 readinessProbe:
   httpGet:
-    path: /top/index.html
+    path: /sample/index.html
     port: 9080
   initialDelaySeconds: 10
   periodSeconds: 10
