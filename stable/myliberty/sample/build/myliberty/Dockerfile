@@ -3,6 +3,7 @@ FROM websphere-liberty:18.0.0.4-javaee8
 USER 0
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    curl \
     language-pack-ja \
     tzdata && \
     rm -rf /var/lib/apt/lists/* && \
