@@ -42,7 +42,7 @@ resources:
     cpu: 1000m
     memory: 512Mi
 
-hostAliases: {}
+hostAliases:
 - ip: "127.0.0.1"
   hostnames:
   - "foo.local"
