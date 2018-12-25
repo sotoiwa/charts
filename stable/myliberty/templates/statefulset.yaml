@@ -74,10 +74,14 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         envFrom:
+        {{- range .Values.configMapNames }}
         - configMapRef:
-            name: {{ .Values.configMapName }}
+            name: {{ . | quote }}
+        {{- end}}
+        {{- range .Values.secretNames }}
         - secretRef:
-            name: {{ .Values.secretName }}
+            name: {{ . | quote }}
+        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         volumeMounts:

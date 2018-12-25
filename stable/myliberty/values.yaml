@@ -12,7 +12,18 @@ image:
 
 replicaCount: 1
 
+service:
+  port: 9080
+
 contextRoot: /sample
+
+ingress:
+  hosts:
+  - mycluster.icp
+  - example.com
+  paths:
+  - /sample/app1
+  - /sample/app2
 
 livenessProbe:
   httpGet:
@@ -52,9 +63,6 @@ hostAliases:
   - "foo.remote"
   - "bar.remote"
 
-service:
-  port: 9080
-
 persistence:
   name: "liberty-pvc"
   size: "1Gi"
@@ -67,5 +75,9 @@ logs:
 env:
   jvmArgs: ""
 
-secretName: common-env
-configMapName: common-env
+secretNames:
+- common-env
+- kobetsu-env
+configMapNames:
+- common-env
+- kobetu-env
