@@ -15,12 +15,12 @@ replicaCount: 1
 service:
   port: 9080
 
-contextRoot: /sample
-
 ingress:
   paths:
-  - /sample/
   - /sample
+  denyPaths:
+  - /sample/admin1
+  - /sample/admin2
 
 livenessProbe:
   httpGet:

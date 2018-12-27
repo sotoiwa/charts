@@ -24,8 +24,9 @@ spec:
           serviceName: {{ $fullName }}
           servicePort: 9080
       {{- end }}
-      - path: {{ .Values.contextRoot }}
+      {{- range .Values.ingress.denyPaths }}
+      - path: {{ . }}
         backend:
           serviceName: default-backend
           servicePort: 80
-
+      {{- end }}
