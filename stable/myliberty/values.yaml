@@ -12,15 +12,7 @@ image:
 
 replicaCount: 1
 
-service:
-  port: 9080
-
-ingress:
-  paths:
-  - /sample
-  denyPaths:
-  - /sample/admin1
-  - /sample/admin2
+terminationGracePeriodSeconds: 30    # Defaults to 30 seconds.
 
 livenessProbe:
   httpGet:
@@ -59,6 +51,16 @@ hostAliases:
   hostnames:
   - "foo.remote"
   - "bar.remote"
+
+service:
+  port: 9080
+
+ingress:
+  paths:
+  - /sample
+  denyPaths:
+  - /sample/admin1
+  - /sample/admin2
 
 persistence:
   name: "liberty-pvc"

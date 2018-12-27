@@ -8,12 +8,12 @@ LibertyコンテナをStatefulSetとしてデプロイします。アプリケ�
 
 ### Init Containerのビルド
 
-Init Containerとして使用するイメージの`/config`と`/userhome`に必要なファイルを含めて下さい。Podの起動時に`/config`と`/userhome`の内容をLibertyコンテナの`/config`と`/userhome`にコピーします。
+Init Containerとして使用するイメージの`/config`と`/userhome/ida`に必要なファイルを含めて下さい。Podの起動時に`/config`と`/userhom/ida`の内容をLibertyコンテナの`/config`と`/userhome/ida`にコピーします。
 
 ```dockerfile
 FROM alpine:3.8
 COPY config/ /config/
-COPY userhome/ /userhome/
+COPY userhome/ida/ /userhome/ida/
 ```
 
 `sample/build`フォルダに例があるので参照して下さい。
