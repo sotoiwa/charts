@@ -1,11 +1,10 @@
 {{- $fullName := include "fullname" . -}}
-{{- $ingressPaths := .Values.ingress.paths -}}
-{{- $contextRoot := .Values.contextRoot -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
     ingress.kubernetes.io/affinity: "cookie"
     ingress.kubernetes.io/session-cookie-name: "route"
     ingress.kubernetes.io/session-cookie-hash: "sha1"
@@ -16,18 +15,17 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   rules:
-  {{- range .Values.ingress.hosts }}
-  - host: {{ . | quote }}
+  - host:
     http:
       paths:
-      {{- range $ingressPaths }}
+      {{- range .Values.ingress.paths }}
       - path: {{ . }}
         backend:
           serviceName: {{ $fullName }}
           servicePort: 9080
       {{- end }}
-      - path: {{ $contextRoot }}
+      - path: {{ .Values.contextRoot }}
         backend:
           serviceName: default-backend
           servicePort: 80
-  {{- end }}
+

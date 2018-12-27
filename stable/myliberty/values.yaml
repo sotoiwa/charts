@@ -18,9 +18,6 @@ service:
 contextRoot: /sample
 
 ingress:
-  hosts:
-  - mycluster.icp
-  - example.com
   paths:
   - /sample/
   - /sample
@@ -70,7 +67,7 @@ persistence:
 logs:
   consoleFormat: basic      # basic(default) or json
   consoleLogLevel: info     # info, audit(default), warning, error, and off
-  consoleSource: message,accessLog    # message(default), trace, accessLog, ffdc, and audit
+  consoleSource: message    # message(default), trace, accessLog, ffdc, and audit
 
 env:
   jvmArgs: ""
