@@ -22,8 +22,8 @@ ingress:
   - mycluster.icp
   - example.com
   paths:
-  - /sample/app1
-  - /sample/app2
+  - /sample/
+  - /sample
 
 livenessProbe:
   httpGet:
@@ -70,14 +70,12 @@ persistence:
 logs:
   consoleFormat: basic      # basic(default) or json
   consoleLogLevel: info     # info, audit(default), warning, error, and off
-  consoleSource: message    # message(default), trace, accessLog, ffdc, and audit
+  consoleSource: message,accessLog    # message(default), trace, accessLog, ffdc, and audit
 
 env:
   jvmArgs: ""
 
 secretNames:
 - common-env
-- kobetsu-env
 configMapNames:
 - common-env
-- kobetu-env
