@@ -1,3 +1,4 @@
+{{ if .Values.ingress.enabled }}
 {{- $fullName := include "fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -30,3 +31,4 @@ spec:
           serviceName: default-backend
           servicePort: 80
       {{- end }}
+{{ end }}
