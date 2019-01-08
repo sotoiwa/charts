@@ -9,7 +9,7 @@ metadata:
 spec:
   serviceName: {{ include "fullname" . }}
   updateStrategy:
-    type: OnDelete
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
   selector:
     matchLabels:
       app: {{ include "fullname" . }}
