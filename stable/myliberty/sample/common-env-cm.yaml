@@ -7,3 +7,4 @@ data:
   DB2_SERVERNAME: db2
   MYSQL_SERVERNAME: mysql
   MYSQL_PORTNUMBER: "3306"
+  DATASOURCE_NAME: "jdbc/mydb"
