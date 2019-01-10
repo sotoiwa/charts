@@ -5,3 +5,5 @@ metadata:
 data:
   DB2_PORT: "50000"
   DB2_SERVERNAME: db2
+  MYSQL_SERVERNAME: mysql
+  MYSQL_PORTNUMBER: "3306"
