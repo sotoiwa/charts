@@ -6,11 +6,17 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   annotations:
+    # ingress.kubernetes.io/rewrite-target: /
     ingress.kubernetes.io/ssl-redirect: "false"
     ingress.kubernetes.io/affinity: "cookie"
-    ingress.kubernetes.io/session-cookie-name: "route"
+    ingress.kubernetes.io/session-cookie-name: "route-{{ $fullName }}"
     ingress.kubernetes.io/session-cookie-hash: "sha1"
-    # ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/server-snippet: |-
+    {{- range .Values.ingress.denyPaths }}
+      location {{ . }} {
+          deny all;
+      }
+    {{- end }}
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
@@ -25,11 +31,5 @@ spec:
         backend:
           serviceName: {{ $fullName }}
           servicePort: {{ $servicePort }}
-      {{- end }}
-      {{- range .Values.ingress.denyPaths }}
-      - path: {{ . }}
-        backend:
-          serviceName: default-backend
-          servicePort: 80
       {{- end }}
 {{ end }}

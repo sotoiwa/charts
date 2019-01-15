@@ -66,8 +66,8 @@ ingress:
   paths:
   - /sample
   denyPaths:
-  - /sample/admin1
-  - /sample/admin2
+  - /sample/hostname
+  - /sample/env
 
 persistence:
   name: "liberty-pvc"
