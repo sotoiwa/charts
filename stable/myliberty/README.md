@@ -18,6 +18,25 @@ COPY userhome/ida/ /userhome/ida/
 
 `sample/build`フォルダに例があるので参照して下さい。
 
+### ClusterRoleBinding
+
+Init Containerでカーネルパラメータを変更しているため、Init Containerに`privileged`な権限が必要です。ICPではデフォルトで`privileged`という名前のClusterRoleが作成されているので、このClusterRoleをデプロイするNamespaceの`dafault`のServiceAccountにバインドします。
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: privileged-psp-sugi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: sugi
+```
+
 ### ConfigMap/Secret
 
 アプリケーションが必要とする構成情報はConfigMap/Secretで渡すことができます。`env`ではなく`envFrom`を使っているので、ConfigMap/SecretのKey名がそのまま環境変数名となります。
@@ -71,7 +90,6 @@ spec:
           operator: In
           values:
           - 9.188.124.125
-
 ```
 
 ## チャートのリリース

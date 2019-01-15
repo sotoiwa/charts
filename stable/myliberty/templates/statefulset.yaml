@@ -39,6 +39,9 @@ spec:
           cp -rp /userhome/ida/* /mnt/userhome/ida/
           chown -R 1001:0 /mnt/config
           chown -R 1001:0 /mnt/userhome/ida
+          sysctl -w net.core.somaxconn=5000
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: config-volume
           mountPath: /mnt/config
