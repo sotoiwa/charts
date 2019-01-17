@@ -65,7 +65,7 @@ docker push mycluster.icp:8500/prod/myliberty:0.0.1
 
 ### RoleBindingの作成
 
-Init Containerでカーネルパラメータを変更しているため、Init Containerに`privileged`な権限が必要です。ICPではデフォルトで`privileged`という`privileged`コンテナを作成可能なPodSecurityPolicy定義されており、またこのPodSecurityPolicyを利用可能な`privileged`というClusterRoleが定義されています。このClusterRoleをデプロイするNamespaceの`dafault`のServiceAccountにバインドするRoleBindingを作成します。
+Init Containerでカーネルパラメータを変更しているため、Init Containerに`privileged`な権限が必要です。ICPではデフォルトで`privileged`という`privileged`コンテナを作成可能なPodSecurityPolicyが定義されており、またこのPodSecurityPolicyを利用可能な`privileged`というClusterRoleが定義されています。このClusterRoleをデプロイするNamespaceの`dafault`のServiceAccountにバインドするRoleBindingを作成します。
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -104,7 +104,7 @@ configMapName: common-env
 
 ### PersistentVolume
 
-チャートをリリースすると、StatefulSetを使用しているので、`volumeClaimTemplates`の定義に基づいてPersistentVolumeClaimが作成されます。
+チャートをリリースすると、StatefulSetの`volumeClaimTemplates`の定義に基づいてPersistentVolumeClaimが作成されます。
 PersistentVolumeClaimの名前は`liberty-pvc-<サブシステム名>-<番号>`のようになります。`liberty-pvc`の部分は`values.yaml`の`persistence.name`で指定可能です。ストレージクラス名はリリース名になります。
 
 チャートのリリース前あるいはリリース後に、この要件を満たすPersistentVolumeを作成して下さい。`claimRef`を指定することで、特定のPersistentVolumeClaimにのみバインドさせることができます。
