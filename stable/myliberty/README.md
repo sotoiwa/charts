@@ -59,8 +59,8 @@ ENV TZ Asia/Tokyo
 ビルドしてプライベートレジストリにpushします。
 
 ```shell
-docker build -t mycluster.icp:8500/prod/myliberty:0.0.1
-docker push mycluster.icp:8500/prod/myliberty:0.0.1
+docker build -t mycluster.icp:8500/prod/myliberty:18.0.0.4
+docker push mycluster.icp:8500/prod/myliberty:18.0.0.4
 ```
 
 ### RoleBindingの作成
