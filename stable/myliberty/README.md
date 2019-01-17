@@ -206,6 +206,7 @@ kind: Service
 metadata:
   name: ca
   labels:
+    app: ca
     chart: myliberty-0.0.1
     release: ca-prod
     heritage: Tiller
