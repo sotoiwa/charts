@@ -4,6 +4,217 @@
 
 LibertyコンテナをStatefulSetとしてデプロイします。アプリケーションはInit ContainerからLibertyコンテナにコピーします。
 
+## 実際のマニフェスト例
+
+以下のようなマニフェストにレンダリングされます。
+
+```yaml
+# Source: myliberty/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ca
+  labels:
+    app: ca
+    chart: myliberty-0.0.1
+    release: ca-test
+    heritage: Tiller
+spec:
+  serviceName: ca
+  updateStrategy:
+    type: OnDelete
+
+  selector:
+    matchLabels:
+      app: ca
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ca
+        chart: myliberty-0.0.1
+        release: ca-test
+        heritage: Tiller
+    spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      terminationGracePeriodSeconds: 30
+      hostAliases:
+      {}
+
+      initContainers:
+      - name: app
+        image: "mycluster.icp:8500/prod/myliberty-app:0.0.1"
+        imagePullPolicy: Always
+        command:
+        - sh
+        - -c
+        - |
+          cp -rp /config/* /mnt/config/
+          cp -rp /userhome/ida/* /mnt/userhome/ida/
+          chown -R 1001:0 /mnt/config
+          chown -R 1001:0 /mnt/userhome/ida
+          sysctl -w net.core.somaxconn=5000
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: config-volume
+          mountPath: /mnt/config
+        - name: ida-volume
+          mountPath: /mnt/userhome/ida
+      containers:
+      - name: liberty
+        image: "mycluster.icp:8500/prod/myliberty:18.0.0.4"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /sample/index.html
+            port: 9080
+          initialDelaySeconds: 180
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /sample/index.html
+            port: 9080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+
+        env:
+        - name: LICENSE
+          value: "accept"
+        - name : WLP_SKIP_UMASK
+          value: "true"
+        - name: WLP_LOGGING_CONSOLE_FORMAT
+          value: basic
+        - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+          value: info
+        - name: WLP_LOGGING_CONSOLE_SOURCE
+          value: message
+        - name: MP_METRICS_TAGS
+          value: "app=ca-test"
+        - name: JVM_ARGS
+          value:
+        - name: NODENAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        envFrom:
+        - configMapRef:
+            name: "common-env"
+        - secretRef:
+            name: "common-env"
+        resources:
+          {}
+
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+        - name: ida-volume
+          mountPath: /userhome/ida
+        - name: liberty-pvc
+          mountPath: /logs
+          subPath: logs
+        - name: liberty-pvc
+          mountPath: /Local/core/wlp
+          subPath: dump
+        - name: liberty-pvc
+          mountPath: /Local/uservar000/ida/log
+          subPath: applogs
+      volumes:
+      - name: config-volume
+        emptyDir: {}
+      - name: ida-volume
+        emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: "liberty-pvc"
+    spec:
+      storageClassName: ca-test
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "1Gi"
+
+---
+# Source: myliberty/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-np
+  labels:
+    app: ca
+    chart: myliberty-0.0.1
+    release: ca-test
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  selector:
+    app: ca
+  ports:
+  - port: 9080
+    targetPort: 9080
+    protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca
+  labels:
+    chart: myliberty-0.0.1
+    release: ca-test
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: ca
+  ports:
+  - port: 9080
+    targetPort: 9080
+    protocol: TCP
+
+---
+# Source: myliberty/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ca
+  annotations:
+    # ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/ssl-redirect: "false"
+    ingress.kubernetes.io/affinity: "cookie"
+    ingress.kubernetes.io/session-cookie-name: "route-ca"
+    ingress.kubernetes.io/session-cookie-hash: "sha1"
+    ingress.kubernetes.io/server-snippet: |-
+      location /sample/admin {
+          deny all;
+      }
+  labels:
+    app: ca
+    chart: myliberty-0.0.1
+    release: ca-test
+    heritage: Tiller
+spec:
+  rules:
+  - host:
+    http:
+      paths:
+      - path: /sample
+        backend:
+          serviceName: ca
+          servicePort: 9080
+```
+
 ## リリースの準備作業
 
 ### Init Containerのビルド
