@@ -40,23 +40,23 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
 
-resources: {}
-  # requests:
-  #   cpu: 100m
-  #   memory: 512Mi
-  # limits:
-  #   cpu: 1000m
-  #   memory: 512Mi
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 512Mi
 
-hostAliases: {}
-# - ip: "127.0.0.1"
-#   hostnames:
-#   - "foo.local"
-#   - "bar.local"
-# - ip: "10.1.2.3"
-#   hostnames:
-#   - "foo.remote"
-#   - "bar.remote"
+hostAliases:
+- ip: "127.0.0.1"
+  hostnames:
+  - "foo.local"
+  - "bar.local"
+- ip: "10.1.2.3"
+  hostnames:
+  - "foo.remote"
+  - "bar.remote"
 
 service:
   port: 9080

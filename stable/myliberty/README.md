@@ -178,9 +178,47 @@ helm install --tls --name <リリース名> --namespace <Namespace名> -f <value
 
 ## 実際のマニフェスト例
 
-以下のようなマニフェストにレンダリングされます。
+以下のようなマニフェストにレンダリングされます。以下は`ca-prod`というリリースを`prod`というNamespaceにリリースした場合の例です。
 
 ```yaml
+# Source: myliberty/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-np
+  labels:
+    app: ca
+    chart: myliberty-0.0.1
+    release: ca-prod
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  selector:
+    app: ca
+  ports:
+  - port: 9080
+    targetPort: 9080
+    protocol: TCP
+---
+# Source: myliberty/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca
+  labels:
+    chart: myliberty-0.0.1
+    release: ca-prod
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: ca
+  ports:
+  - port: 9080
+    targetPort: 9080
+    protocol: TCP
+---
 # Source: myliberty/templates/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
@@ -189,7 +227,7 @@ metadata:
   labels:
     app: ca
     chart: myliberty-0.0.1
-    release: ca-test
+    release: ca-prod
     heritage: Tiller
 spec:
   serviceName: ca
@@ -205,14 +243,21 @@ spec:
       labels:
         app: ca
         chart: myliberty-0.0.1
-        release: ca-test
+        release: ca-prod
         heritage: Tiller
     spec:
       restartPolicy: Always
       dnsPolicy: ClusterFirst
       terminationGracePeriodSeconds: 30
       hostAliases:
-      {}
+      - hostnames:
+        - foo.local
+        - bar.local
+        ip: 127.0.0.1
+      - hostnames:
+        - foo.remote
+        - bar.remote
+        ip: 10.1.2.3
 
       initContainers:
       - name: app
@@ -272,7 +317,7 @@ spec:
         - name: WLP_LOGGING_CONSOLE_SOURCE
           value: message
         - name: MP_METRICS_TAGS
-          value: "app=ca-test"
+          value: "app=ca-prod"
         - name: JVM_ARGS
           value:
         - name: NODENAME
@@ -285,7 +330,12 @@ spec:
         - secretRef:
             name: "common-env"
         resources:
-          {}
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 512Mi
 
         volumeMounts:
         - name: config-volume
@@ -310,51 +360,12 @@ spec:
   - metadata:
       name: "liberty-pvc"
     spec:
-      storageClassName: ca-test
+      storageClassName: ca-prod
       accessModes:
       - ReadWriteOnce
       resources:
         requests:
           storage: "1Gi"
-
----
-# Source: myliberty/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: ca-np
-  labels:
-    app: ca
-    chart: myliberty-0.0.1
-    release: ca-test
-    heritage: Tiller
-spec:
-  type: ClusterIP
-  selector:
-    app: ca
-  ports:
-  - port: 9080
-    targetPort: 9080
-    protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ca
-  labels:
-    chart: myliberty-0.0.1
-    release: ca-test
-    heritage: Tiller
-spec:
-  type: ClusterIP
-  clusterIP: None
-  selector:
-    app: ca
-  ports:
-  - port: 9080
-    targetPort: 9080
-    protocol: TCP
-
 ---
 # Source: myliberty/templates/ingress.yaml
 apiVersion: extensions/v1beta1
@@ -374,7 +385,7 @@ metadata:
   labels:
     app: ca
     chart: myliberty-0.0.1
-    release: ca-test
+    release: ca-prod
     heritage: Tiller
 spec:
   rules:
