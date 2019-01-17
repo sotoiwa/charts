@@ -1,12 +1,12 @@
 # Init Containerのイメージの指定
 appImage:
-  repository: mycluster.icp:8500/sugi/myliberty-app
+  repository: mycluster.icp:8500/prod/myliberty-app
   tag: "0.0.1"
   pullPolicy: Always    # Always(default), Never, IfNotPresent
 
 # Liberty Containerのイメージの指定
 image:
-  repository: mycluster.icp:8500/sugi/myliberty
+  repository: mycluster.icp:8500/prod/myliberty
   tag: "18.0.0.4"
   pullPolicy: Always
 
@@ -48,15 +48,15 @@ resources: {}
   #   cpu: 1000m
   #   memory: 512Mi
 
-hostAliases:
-- ip: "127.0.0.1"
-  hostnames:
-  - "foo.local"
-  - "bar.local"
-- ip: "10.1.2.3"
-  hostnames:
-  - "foo.remote"
-  - "bar.remote"
+hostAliases: {}
+# - ip: "127.0.0.1"
+#   hostnames:
+#   - "foo.local"
+#   - "bar.local"
+# - ip: "10.1.2.3"
+#   hostnames:
+#   - "foo.remote"
+#   - "bar.remote"
 
 service:
   port: 9080
@@ -66,8 +66,7 @@ ingress:
   paths:
   - /sample
   denyPaths:
-  - /sample/hostname
-  - /sample/env
+  - /sample/admin
 
 persistence:
   name: "liberty-pvc"

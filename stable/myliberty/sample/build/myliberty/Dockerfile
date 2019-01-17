@@ -1,14 +1,14 @@
 FROM websphere-liberty:18.0.0.4-javaee8
 # Change locale and timezone
 USER 0
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     language-pack-ja \
-    tzdata && \
-    rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata
+    tzdata \
+  && rm -rf /var/lib/apt/lists/* \
+  && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+  && dpkg-reconfigure -f noninteractive tzdata
 USER 1001
 # Install features
 RUN /opt/ibm/wlp/bin/installUtility install wmqJmsClient-2.0 --acceptLicense
