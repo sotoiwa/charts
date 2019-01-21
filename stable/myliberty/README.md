@@ -176,6 +176,58 @@ helm install --tls --debug --dry-run --name <リリース名> --namespace <Names
 helm install --tls --name <リリース名> --namespace <Namespace名> -f <valuefile> myliberty
 ```
 
+### チャートのパラメータ
+
+チャートのパラメータはvaluefileで指定します。
+
+| Qualifier | Parameter             | Definition | Allowed Value |
+|---|---|---|---|
+| `appImage`| `repository`          | アプリケーションを格納したイメージのリポジトリ名。 | |
+|           | `tag`                 | イメージのタグ名。 | |
+|           | `pullPolicy`          | Image Pull Policy | `Always`（デフォルト）、`Never`、`IfNotPresent`が指定可能。 |
+| `image`   | `repository`          | Libertyイメージのリポジトリ名。 | |
+|           | `tag`                 | イメージのタグ名。 | |
+|           | `pullPolicy`          | Image Pull Policy | `Always`、`Never`、`IfNotPresent`（デフォルト）が指定可能。 |
+| `replicaCount` |                  | レプリカ数。デフォルトは1。 | |
+| `updateStrategy` | `type`         | アップデート戦略。 | `RollingUpdate`または`OnDelete`（デフォルト）が指定可能。 |
+|           | `rollingUpdate.partition` | 何個目のレプリカまで更新するかを指定。 | アップデート戦略が`RollingUpdate`のときのみ指定可能。デフォルトは`0`（全て更新）。 |
+| `terminationGracePeriodSeconds` | | Pod停止時にSIGTERMを送った後、SIGKILLを送るまでの猶予時間。 | デフォルトは`30`秒。 |
+| `livenessProbe` | `httpGet.path`  | Probeの宛先パス。 | |
+|           | `httpGet.port`        | Probeの宛先ポート。 | |
+|           | `initialDelaySeconds` | Probe開始までの待機時間。 | デフォルト`180`秒。最小`0`秒。 |
+|           | `periodSeconds`       | Probe間隔。 | デフォルト`10`秒。最小`1`秒。 |
+|           | `timeoutSeconds`      | Probeのタイムアウト時間。 | デフォルト`1`秒。最小`1`秒。 |
+|           | `failureThreshold`    | Probeが何回失敗したら異常と判断するか。 | デフォルト`3`回。最小`1`回。 |
+|           | `successThreshold`    | Probeが何回失敗したら正常と判断するか。 | デフォルト`1`回。最小`1`回。Livenessの場合は`1`回でなければならない。 |
+| `readinessProbe` | `httpGet.path` | Probeの宛先パス。 | |
+|           | `httpGet.port`        | Probeの宛先ポート。 | |
+|           | `initialDelaySeconds` | Probe開始までの待機時間。 | デフォルト`180`秒。最小`0`秒。 |
+|           | `periodSeconds`       | Probe間隔。 | デフォルト`10`秒。最小`1`秒。 |
+|           | `timeoutSeconds`      | Probeのタイムアウト時間。 | デフォルト`1`秒。最小`1`秒。 |
+|           | `failureThreshold`    | Probeが何回失敗したら異常と判断するか。 | デフォルト`3`回。最小`1`回。 |
+|           | `successThreshold`    | Probeが何回失敗したら正常と判断するか。 | デフォルト`1`回。最小`1`回。 |
+| `resources` | `requests.cpu`      | コンテナの起動に必要なCPUの最小値。 | `100m`は0.1コアの意味。 |
+|           | `requests.memory`     | コンテナの起動に必要なメモリーの最小値。 | |
+|           | `limits.cpu`          | コンテナが使用可能なCPUの最大値。 | |
+|           | `limits.memory`       | コンテナが使用可能なメモリーの最大値。 | |
+| `hostAliases` |                   | Podの`/etc/hosts`に追記する名前解決エントリの配列。 | |
+|           | `ip`                  | IPアドレス。 | |
+|           | `hostnames`           | IPアドレスに対応するホスト名の配列。 | |
+| `service` | `port`                | Serviceが公開するポート。 | デフォルトは`9080`。 |
+| `ingress` | `enabled`             | Ingressリソースを作成するか。 | デフォルトは`true`。 |
+|           | `paths`               | Liberyにルーティングするパスの配列。 | |
+|           | `denyPaths`           | アクセスを拒否するパスの配列。 | |
+| `persistence` | `name`            | StatefulSetが作成するPVCのプレフィックス。 | |
+|           | `size`                | ストレージのサイズ。 | デフォルトは`1Gi`。 |
+| `logs`    | `consoleFormat`       | コンソールログの出力形式。 | `json`または`basic`（デフォルト）。 |
+|           | `consoleLogLevel`     | コンソールログのログレベル。 | `info`（デフォルト）、`audit`、`warning`、`error`、`off`が指定可能。 | 
+|           | `consoleSource`       | コンソールログに含めるソースの指定。出力形式が`json`の場合のみ有効。 | `message`、`trace`、`accessLog`、`ffdc`、`audit`の組み合わせが指定可能。デフォルトは`message`。 |
+| `env`     | `jvmArgs`             | Libertyコンテナの`JVM_ARGS`環境変数を指定。 | |
+| `secretNames`     |               | Libertyコンテナに設定する環境変数のSecretの名前の配列。 | |
+| `configMapNames:`    |            | Libertyコンテナに設定する環境変数のConfigMapßの名前の配列。 | |
+
+```
+
 ## 実際のマニフェスト例
 
 以下のようなマニフェストにレンダリングされます。以下は`ca-prod`というリリースを`prod`というNamespaceにリリースした場合の例です。
