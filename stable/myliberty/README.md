@@ -226,8 +226,6 @@ helm install --tls --name <リリース名> --namespace <Namespace名> -f <value
 | `secretNames`     |               | Libertyコンテナに設定する環境変数のSecretの名前の配列。 | |
 | `configMapNames:`    |            | Libertyコンテナに設定する環境変数のConfigMapßの名前の配列。 | |
 
-```
-
 ## 実際のマニフェスト例
 
 以下のようなマニフェストにレンダリングされます。以下は`ca-prod`というリリースを`prod`というNamespaceにリリースした場合の例です。
