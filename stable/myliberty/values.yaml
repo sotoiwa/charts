@@ -1,16 +1,16 @@
 # Init Containerのイメージの指定
 appImage:
-  repository: mycluster.icp:8500/prod/myliberty-app
+  repository: mycluster.icp:8500/sugi/myliberty-app
   tag: "0.0.1"
   pullPolicy: Always    # Always(default), Never, IfNotPresent
 
 # Liberty Containerのイメージの指定
 image:
-  repository: mycluster.icp:8500/prod/myliberty
+  repository: mycluster.icp:8500/sugi/myliberty
   tag: "18.0.0.4"
   pullPolicy: Always
 
-replicaCount: 1
+replicaCount: 3
 
 updateStrategy:
   type: OnDelete
