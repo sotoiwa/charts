@@ -27,7 +27,7 @@ spec:
       dnsPolicy: ClusterFirst
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       hostAliases:
-        {{- toYaml .Values.hostAliases | nindent 6 }}
+        {{- toYaml .Values.hostAliases | nindent 8 }}
       initContainers:
       - name: app
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -93,13 +93,13 @@ spec:
           mountPath: /config
         - name: ida-volume
           mountPath: /userhome/ida
-        - name: liberty-pvc
+        - name: {{ .Values.persistence.name  }}
           mountPath: /logs
           subPath: logs
-        - name: liberty-pvc
+        - name: {{ .Values.persistence.name }}
           mountPath: /Local/core/wlp
           subPath: dump
-        - name: liberty-pvc
+        - name: {{ .Values.persistence.name }}
           mountPath: /Local/uservar000/ida/log
           subPath: applogs
       volumes:
@@ -109,7 +109,7 @@ spec:
         emptyDir: {}
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Values.persistence.name | quote }}
+      name: {{ .Values.persistence.name }}
     spec:
       storageClassName: {{ .Release.Name }}
       accessModes:
