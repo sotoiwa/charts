@@ -11,11 +11,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-    ingress.kubernetes.io/affinity: "cookie"
-    ingress.kubernetes.io/session-cookie-name: "route-{{ $fullName }}"
-    ingress.kubernetes.io/session-cookie-hash: "sha1"
-    ingress.kubernetes.io/server-snippet: |-
+    {{ .Values.ingress.annotationsPrefix }}/ssl-redirect: "false"
+    {{ .Values.ingress.annotationsPrefix }}/affinity: "cookie"
+    {{ .Values.ingress.annotationsPrefix }}/session-cookie-name: "route-{{ $fullName }}"
+    {{ .Values.ingress.annotationsPrefix }}/session-cookie-hash: "sha1"
+    {{ .Values.ingress.annotationsPrefix }}/server-snippet: |-
     {{- range .Values.ingress.denyPaths }}
       location {{ . }} {
           deny all;
@@ -23,7 +23,7 @@ metadata:
     {{- end }}
 spec:
   rules:
-  - host:
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
       {{- range .Values.ingress.paths }}

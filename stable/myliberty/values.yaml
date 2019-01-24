@@ -63,6 +63,8 @@ service:
 
 ingress:
   enabled: true
+  annotationsPrefix: ingress.kubernetes.io
+  host: ""
   paths:
   - /sample
   denyPaths:
